@@ -1,8 +1,13 @@
-<div class="container text-center mt-5">
-  <h2>Account Login</h2>
-  <form>
-    <input type="email" class="form-control mt-4" id="floatingInput" placeholder="Email">
-    <input type="password" class="form-control mt-4" id="floatingPassword" placeholder="Password">
-    <button type="submit" class="btn btn-primary mt-5">Sign in</button>
-  </form>
+<div class="text-center">
+  {{#if user}}
+    <h2>Welcome back, {{ user.firstName }}!</h2>
+  {{else}}
+    <h2>Account Login</h2>
+    <form action="/" method="POST">
+      <input type="email" name="email" class="form-control mt-4" placeholder="Email" value="{{ email }}" required>
+      <input type="password" name="password" class="form-control mt-4" placeholder="Password" required>
+      {{#if warningMessage}}<p class="mt-2">Username 或 Password 錯誤</p>{{/if}}
+      <button type="submit" class="btn btn-primary mt-5">Sign in</button>
+    </form>
+  {{/if}}
 </div>
