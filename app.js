@@ -1,5 +1,8 @@
 const express = require('express')
 const exphbs = require('express-handlebars')
+
+require('./config/mongoose')
+
 const app = express()
 
 app.engine('hbs', exphbs.engine({ defaultLayout: 'main', extname: '.hbs' }))
