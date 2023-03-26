@@ -1,24 +1,35 @@
 const express = require('express')
 const router = express.Router()
 
-const user = require('../../models/user')
+const cookieParser = require('cookie-parser')
+router.use(cookieParser())
+
+const User = require('../../models/user')
 
 router.get('/', (req, res) => {
-  res.render('index')
+  const { userId } = req.cookies
+
+  if (!userId) return res.render('index')
+
+  return User.findOne({ _id: userId })
+    .lean()
+    .then(user => {
+      res.render('index', { user })
+    })
+    .catch(error => console.log(error))
 })
 
 router.post('/', (req, res) => {
   const { email, password } = req.body
   const warningMessage = true
 
-  return user.findOne({ email, password })
+  return User.findOne({ email, password })
     .lean()
     .then(user => {
-      if (user) {
-        res.render('index', { user })
-      } else {
-        res.render('index', { warningMessage, email })
-      }
+      if (!user) return res.render('index', { warningMessage, email })
+
+      res.cookie('userId', `${ user._id }`)
+      res.render('index', { user })
     })
     .catch(error => console.log(error))
 })
